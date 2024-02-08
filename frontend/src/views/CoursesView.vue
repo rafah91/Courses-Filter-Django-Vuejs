@@ -12,8 +12,8 @@
 <script>
     import CourseList from '@/components/CourseList.vue';
     import CourseFilter from '@/components/CourseFilter.vue';
-    import { courses } from '../temp-data'
-
+    
+    import axios from 'axios'
     export default {
         name: 'CoursesList',
         components:{
@@ -22,11 +22,24 @@
         },
         data(){
             return {
-                courses:courses,
-                filteredCourses: courses
+                courses:null,
+                filteredCourses: null
             }
         },
+        created(){
+            this.getCourses()
+        },
         methods:{
+            getCourses(){
+                axios.get("http://127.0.0.1:8000/api/courses")
+                .then(response => {
+                    this.courses = response.data
+                    this.filteredCourses = response.data
+                })
+            },
+
+
+
             filterCourses(selectedCategory){
                 if (selectedCategory.length == 0){
                     this.filteredCourses = this.courses
