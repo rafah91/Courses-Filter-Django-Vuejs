@@ -40,12 +40,17 @@
 
 
 
-            filterCourses(selectedCategory){
+            async filterCourses(selectedCategory){
                 if (selectedCategory.length == 0){
                     this.filteredCourses = this.courses
                 }
                 else{
-                    this.filteredCourses = this.courses.filter(course => selectedCategory.includes( course.category_id))
+                    // this.filteredCourses = this.courses.filter(course => selectedCategory.includes( course.category_id))
+
+                   console.log(selectedCategory)
+                   const categoryIDS = selectedCategory.join(',')   // [1,4,5] --> 1,4,5
+                   const response = await axios.get(`http://127.0.0.1:8000/api/courses?category=${categoryIDS}`)
+                   this.filteredCourses = response.data
                 }
             }
         }
