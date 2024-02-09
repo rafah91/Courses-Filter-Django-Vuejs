@@ -26,13 +26,25 @@
 
 <script>
 
-    import { courses } from '../temp-data'
+    import axios from 'axios'
 
     export default {
         name: 'CourseDetail',
         data(){
             return {
-                course: courses.find( course => course.id == this.$route.params.courseId)
+                course: null
+            }
+        },
+        created(){
+            this.getCourse()
+        },
+        methods:{
+            getCourse(){
+                const courseID =  this.$route.params.courseId
+                axios.get(`http://127.0.0.1:8000/api/courses/${courseID}`)
+                .then(response => {
+                    this.course = response.data
+                })
             }
         }
     }
