@@ -15,14 +15,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import re_path
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from rest_framework import routers
+from courses.views import CategoryListAPI, CourseViewset
+#from courses.views import CourseListAPI,
+#from courses.views import CourseDetailAPI
 
+router = routers.DefaultRouter()
+router.register('courses/api',CourseViewset)
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -37,15 +43,14 @@ schema_view = get_schema_view(
    permission_classes=(permissions.AllowAny,),
 )
 
-from courses.views import CourseDetailAPI,CourseListAPI,CategoryListAPI
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-
-    path('api/courses' , CourseListAPI.as_view()),
-    path('api/category' , CategoryListAPI.as_view()),
-    path('api/courses/<int:pk>' , CourseDetailAPI.as_view()),
+    path('', include(router.urls)),
+    #path('courses/api' , CourseListAPI.as_view()),
+    path('category/api' , CategoryListAPI.as_view()),
+    #path('api/courses/<int:pk>' , CourseDetailAPI.as_view()),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
