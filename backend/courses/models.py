@@ -17,7 +17,7 @@ class Course(models.Model):
     name = models.CharField(max_length=100)
     subtitle = models.CharField(max_length=300)
     description = models.TextField(max_length=5000)
-    image = models.ImageField(upload_to='courses')
+    image = models.ImageField(upload_to='courses',null=True,blank=True)
     price = models.FloatField()
     category = models.ForeignKey(Category,related_name='courses_category',on_delete=models.SET_NULL,null=True)
     
